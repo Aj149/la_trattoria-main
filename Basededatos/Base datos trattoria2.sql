@@ -82,12 +82,12 @@ CREATE TABLE public."Reservas" (
 	"Fk_AmbienteID" integer,
 	"Fk_MenuID" integer,
 	"Fecha" date,
-	"Hora" time,
+	"hora_reserva" time,
 	"Num_comensales" numeric(4),
 	CONSTRAINT "Reservas_pk" PRIMARY KEY ("ReservaID")
 );
 -- ddl-end --
-COMMENT ON COLUMN public."Reservas"."ReservaID" IS E'Clave primaria de reservas.';
+COMMENT ON COLUMN public."Reservas"."ReservaID" IS E'Clave primaria de Reservas.';
 -- ddl-end --
 COMMENT ON COLUMN public."Reservas"."Fk_ClienteID" IS E'Clave foranea del la tabla clientes';
 -- ddl-end --
@@ -97,7 +97,7 @@ COMMENT ON COLUMN public."Reservas"."Fk_MenuID" IS E'Clave foranea de la tabla m
 -- ddl-end --
 COMMENT ON COLUMN public."Reservas"."Fecha" IS E'Fecha de reserva';
 -- ddl-end --
-COMMENT ON COLUMN public."Reservas"."Hora" IS E'Hora de reserva';
+COMMENT ON COLUMN public."Reservas"."hora_reserva" IS E'hora_reserva de reserva';
 -- ddl-end --
 COMMENT ON COLUMN public."Reservas"."Num_comensales" IS E'Numero de comensales que ingresa el cliente';
 -- ddl-end --
@@ -116,7 +116,7 @@ CREATE TABLE public."Facturas" (
 -- ddl-end --
 COMMENT ON COLUMN public."Facturas"."FacturaID" IS E'Clave primaria de la factura';
 -- ddl-end --
-COMMENT ON COLUMN public."Facturas"."Fk_ReservaID" IS E'Clave foranea de la tabla reservas';
+COMMENT ON COLUMN public."Facturas"."Fk_ReservaID" IS E'Clave foranea de la tabla Reservas';
 -- ddl-end --
 COMMENT ON COLUMN public."Facturas"."Metodo_pago" IS E'Metodo de pago que utiliza el cliente';
 -- ddl-end --

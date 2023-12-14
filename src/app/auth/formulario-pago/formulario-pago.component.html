@@ -108,15 +108,15 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="form-group">
-          <label for="cantidad">Cantidad de Personas</label>
-          <input type="number" class="form-control" id="cantidad" formControlName="cantidad">
-          <div *ngIf="formulario.get('cantidad')?.hasError('required') && formulario.get('cantidad')?.touched">
+          <label for="cantidad_personas">Cantidad de Personas</label>
+          <input type="number" class="form-control" id="cantidad_personas" formControlName="cantidad_personas">
+          <div *ngIf="formulario.get('cantidad_personas')?.hasError('required') && formulario.get('cantidad_personas')?.touched">
             La cantidad es obligatoria.
           </div>
-          <div *ngIf="formulario.get('cantidad')?.hasError('pattern') && formulario.get('cantidad')?.touched">
+          <div *ngIf="formulario.get('cantidad_personas')?.hasError('pattern') && formulario.get('cantidad_personas')?.touched">
             Ingrese un número válido.
           </div>
-          <div *ngIf="formulario.get('cantidad')?.value > limiteSeleccionado && formulario.get('cantidad')?.touched">
+          <div *ngIf="formulario.get('cantidad_personas')?.value > limiteSeleccionado && formulario.get('cantidad_personas')?.touched">
             La cantidad excede la capacidad del ambiente. capacidad maxima: ({{ limiteSeleccionado }} personas).
           </div>
         </div>
@@ -130,61 +130,44 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="form-group col-md-6 mt-3">
-        <label for="fechaNacimiento">Fecha de Reserva</label>
+        <label for="fecha_reserva">Fecha de Reserva (dd/mm/aaaa)</label>
   
-        <div class="row mt-2">
-          <div class="col">
-            <label for="dia">Día</label>
-            <input type="number" class="form-control" id="dia" placeholder="Día" formControlName="dia" style="padding-left: 10px;">
-          </div>
+        <input type="text" class="form-control" id="fecha_reserva" placeholder="dd/mm/aaaa" formControlName="fecha_reserva" style="padding-left: 10px;">
   
-          <div class="col">
-            <label for="mes">Mes</label>
-            <input type="number" class="form-control" id="mes" placeholder="Mes" formControlName="mes" style="padding-left: 10px;">
-          </div>
-  
-          <div class="col">
-            <label for="anio">Año</label>
-            <input type="number" class="form-control" id="anio" placeholder="Año" formControlName="anio" min="2023" style="padding-left: 10px;">
-          </div>
+        <div *ngIf="formulario.get('fecha_reserva')?.hasError('required') && formulario.get('fecha_reserva')?.touched">
+          La fecha es obligatoria.
         </div>
-  
-        <div *ngIf="formulario.get('dia')?.hasError('required') && formulario.get('dia')?.touched">
-          El campo día es obligatorio.
+        
+        <div *ngIf="formulario.get('fecha_reserva')?.hasError('pattern') && formulario.get('fecha_reserva')?.touched">
+          Ingresa una fecha válida en formato dd/mm/aaaa.
         </div>
-  
-        <div *ngIf="formulario.get('mes')?.hasError('required') && formulario.get('mes')?.touched">
-          El campo mes es obligatorio.
+        
+        <div *ngIf="formulario.get('fecha_reserva')?.hasError('fechaInvalida')">
+          Ingresa una fecha válida mayor o igual a la fecha actual.
         </div>
-  
-        <div *ngIf="formulario.get('anio')?.hasError('required') && formulario.get('anio')?.touched">
-          El campo año es obligatorio.
-        </div>
-  
-        <div *ngIf="formulario.get('anio')?.hasError('min') && formulario.get('anio')?.touched">
-          Ingresa un año a partir de 2023.
-        </div>
+        
       </div>
     </div>
   </div>
   
   
+  
   <div class="container">
     <div class="row justify-content-center">
       <div class="form-group col-md-6 mt-3">
-        <label for="hora">Hora de Reserva</label>
+        <label for="hora_reserva">hora_reserva de Reserva</label>
         <input
           type="text"
           class="form-control mt-2"
-          id="hora"
+          id="hora_reserva"
           placeholder="hh:mm am/pm"
-          formControlName="hora" style="padding-left: 10px;"
+          formControlName="hora_reserva" style="padding-left: 10px;"
         />
-        <div *ngIf="formulario.get('hora')?.hasError('required') && formulario.get('hora')?.touched">
-          La hora es obligatoria.
+        <div *ngIf="formulario.get('hora_reserva')?.hasError('required') && formulario.get('hora_reserva')?.touched">
+          La hora_reserva es obligatoria.
         </div>
-        <div *ngIf="formulario.get('hora')?.hasError('formatoInvalido')">
-          Ingresa una hora válida en el formato hh:mm am/pm.
+        <div *ngIf="formulario.get('hora_reserva')?.hasError('formatoInvalido')">
+          Ingresa una hora_reserva válida en el formato hh:mm am/pm.
         </div>
       </div>
     </div>

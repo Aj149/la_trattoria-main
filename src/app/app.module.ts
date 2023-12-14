@@ -15,8 +15,8 @@ import { DeleteComponent } from './auth/delete/delete.component';
 import { UpdateComponent } from './auth/update/update.component';
 import { FormularioPagoComponent } from './auth/formulario-pago/formulario-pago.component';
 import { FormsModule, ReactiveFormsModule, } from '@angular/forms';
-import { Authservice } from './auth/auth.service';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -41,7 +41,8 @@ import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/
     Ambiente3Module,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   exports: [
     AppComponent,
@@ -58,5 +59,3 @@ import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-

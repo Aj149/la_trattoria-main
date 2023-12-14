@@ -24,38 +24,44 @@ def get_connection():
 CORS(app)
 
 @cross_origin
-@app.route('/app/insertar/reservas', methods=['POST'])
+
+@app.route('/app/insertar/Reservas', methods=['POST'])
 def crear_reserva():
     try:
         nuevo_pago = request.get_json()
         new_nombre = nuevo_pago["nombre"]
         new_apellido = nuevo_pago["apellido"]
-        new_cedula = nuevo_pago["cedula"]
         new_correo = nuevo_pago["correo"]
         new_numero_telefono = nuevo_pago["numero_telefono"]
-        new_ambiente = nuevo_pago["ambiente"]
-        new_fecha_expiracion = nuevo_pago["fecha_Expiracion"]
-        new_dia = nuevo_pago["dia"]
-        new_mes = nuevo_pago["mes"]
-        new_anio = nuevo_pago["anio"]
         new_cantidad_personas = nuevo_pago["cantidad_personas"]
+        new_ambiente_nombre = nuevo_pago["ambiente"]  # Obtener el nombre del ambiente desde el JSON
+        new_cedula = nuevo_pago["cedula"]
         new_fecha_reserva = nuevo_pago["fecha_reserva"]
         new_hora_reserva = nuevo_pago["hora_reserva"]
-        new_numero_tarjeta = nuevo_pago["numero_tarjeta"]
 
         with get_connection() as conn, conn.cursor(cursor_factory=extras.RealDictCursor) as cursor:
             # Insertar datos del cliente
             cursor.execute(
-                "INSERT INTO Clientes (nombre, apellido, cedula, correo, numero_telefono) VALUES (%s, %s, %s, %s, %s) RETURNING id",
-                (new_nombre, new_apellido, new_cedula, new_correo, new_numero_telefono)
+                "INSERT INTO clientes (apellido, nombre, numero_telefono, numero_cedula, correo_electronico) VALUES (%s, %s, %s, %s, %s) ON CONFLICT (numero_cedula) DO UPDATE SET nombre = EXCLUDED.nombre, apellido = EXCLUDED.apellido, correo_electronico = EXCLUDED.correo_electronico, numero_telefono = EXCLUDED.numero_telefono RETURNING id_cliente",
+                (new_apellido, new_nombre, new_numero_telefono, new_cedula, new_correo,)
             )
             # Obtener el ID del cliente insertado
-            cliente_id = cursor.fetchone()['id']
+            id_cliente = cursor.fetchone()['id_cliente']
+
+            # Obtener el ID del ambiente por su nombre
+            cursor.execute('SELECT id_ambiente FROM "ambientes" WHERE nombre_ambiente = %s', (new_ambiente_nombre,))
+            id_ambiente_row = cursor.fetchone()
+
+            if id_ambiente_row:
+                new_ambiente = id_ambiente_row['id_ambiente']
+            else:
+                # Manejar el caso donde no se encuentre el ambiente por su nombre
+                return jsonify({"error": "Ambiente no encontrado"}), 404
 
             # Insertar datos en la tabla Reservas
             cursor.execute(
-                "INSERT INTO Reservas (fecha, hora, numero_comensales, FK_clientes, FK_ambientes) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *",
-                (new_fecha_reserva, new_hora_reserva, new_numero_tarjeta, new_cantidad_personas, cliente_id, new_ambiente)
+                "INSERT INTO reservas (fecha, numero_comensales, FK_clientes, FK_ambientes, nueva_hora) VALUES (%s, %s, %s, %s, %s) RETURNING *",
+                (new_fecha_reserva, new_cantidad_personas, id_cliente, new_ambiente, new_hora_reserva)
             )
             selectReservas = cursor.fetchall()
 
@@ -83,7 +89,7 @@ def seleccionar_ambiente():
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=extras.RealDictCursor)
-        cursor.execute('SELECT id_ambiente, nombre_ambiente, capacidad, precio FROM "Ambientes"')
+        cursor.execute('SELECT id_ambiente, nombre_ambiente, capacidad, precio FROM "ambientes"')
         selectAmbiente = cursor.fetchall()
         print(selectAmbiente)
         return jsonify(selectAmbiente)
@@ -105,7 +111,7 @@ def seleccionar_capacidad(nombre_ambiente):
     try:
         conn = get_connection()
         cursor = conn.cursor(cursor_factory=extras.RealDictCursor)
-        cursor.execute('SELECT capacidad FROM "Ambientes" WHERE nombre_ambiente = %s', (nombre_ambiente,))
+        cursor.execute('SELECT capacidad FROM "ambientes" WHERE nombre_ambiente = %s', (nombre_ambiente,))
         capacidad_ambiente = cursor.fetchone()
 
         if capacidad_ambiente:

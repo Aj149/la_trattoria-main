@@ -15,6 +15,7 @@ export class FormularioPagoComponent implements OnInit {
   limiteSeleccionado: number = 0;
   ambiente: any;
   
+  private fechaActual = new Date();
 
   constructor(
     private http: HttpClient,
@@ -28,18 +29,13 @@ export class FormularioPagoComponent implements OnInit {
       apellido: ['', [Validators.required]],
       correo: ['', [Validators.required, Validators.email]],
       numero_telefono: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      cantidad: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      cantidad_personas: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       ambiente: ['', [Validators.required]],
       fechaExpiracion: ['', [Validators.required, this.formatoFechaValido()]],
       cedula: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      numeroTarjeta: [
-        '',
-        [Validators.required, Validators.pattern(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/)],
-      ],
-      dia: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      mes: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      anio: ['', [Validators.required, Validators.min(2023), Validators.pattern(/^[0-9]+$/)]],
-      hora: ['', [Validators.required, this.validarHora]],
+      numeroTarjeta: ['',[Validators.required, Validators.pattern(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/)],],
+      fecha_reserva: ['',[Validators.required,Validators.pattern(/^\d{2}\/\d{2}\/\d{4}$/),this.validarFecha,],],
+      hora_reserva: ['', [Validators.required, this.validarhora_reserva]],
     });
   }
 
@@ -70,22 +66,18 @@ export class FormularioPagoComponent implements OnInit {
   }
   
 
-  
-
 
   realizarPago() {
     const data = {
       nombre: this.formulario.get('nombre')?.value,
       apellido: this.formulario.get('apellido')?.value,
-      cedula: this.formulario.get('cedula')?.value,
       correo: this.formulario.get('correo')?.value,
-      cantidad: this.formulario.get('cantidad')?.value,
       numero_telefono: this.formulario.get('numero_telefono')?.value,
+      cantidad_personas: this.formulario.get('cantidad_personas')?.value,
       ambiente: this.formulario.get('ambiente')?.value,
-      fecha_Expiracion: this.formulario.get('fechaExpiracion')?.value,
-      dia: this.formulario.get('dia')?.value,
-      mes: this.formulario.get('mes')?.value,
-      anio: this.formulario.get('anio')?.value,
+      cedula: this.formulario.get('cedula')?.value,
+      fecha_reserva: this.formulario.get('fecha_reserva')?.value,
+      hora_reserva: this.formulario.get('hora_reserva')?.value
     };
 
     this.authService.realizarPago(data)?.subscribe({
@@ -98,10 +90,23 @@ export class FormularioPagoComponent implements OnInit {
     });
   }
 
-  validarHora(control: AbstractControl) {
-    const horaRegex = /^(1[0-2]|0?[1-9]):[0-5][0-9] (am|pm)$/i;
 
-    if (control.value && !horaRegex.test(control.value)) {
+  validarFecha: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
+    const fechaIngresada = new Date(control.value);
+    
+    // Verificar si la fecha ingresada es menor que la fecha actual
+    if (fechaIngresada < this.fechaActual) {
+      return { fechaInvalida: true };
+    }
+    
+    return null;
+  };
+
+
+  validarhora_reserva(control: AbstractControl) {
+    const hora_reservaRegex = /^(1[0-2]|0?[1-9]):[0-5][0-9] (am|pm)$/i;
+
+    if (control.value && !hora_reservaRegex.test(control.value)) {
       return { formatoInvalido: true };
     }
 
