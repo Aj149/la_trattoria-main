@@ -1,0 +1,37 @@
+<main>
+  <div class="form_class">
+    <H1>REGISTROS</H1>
+    <BR>
+    <table>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Cédula</th>
+        <th>Fecha</th>
+        <th>Teléfono</th>
+        <th>Ambiente</th>
+        <th>Nro. de reserva</th>
+        <th>Cantidad de personas</th>
+        <th>Modificadores</th>
+      </tr>
+      <tbody>
+      <!-- {% for dato in datos %} -->
+      <tr>
+        <td>nombre</td>
+        <td>apellido</td>
+        <td>idcedula</td>
+        <td>fecha</td>
+        <td>telefono</td>
+        <td>nombre ambiente</td>
+        <td>idreserva</td>
+        <td>cantidad de personas</td>
+        <td> <span style="font-size: 24px;color:green;">
+          <a routerLink="/update"> <i class="fas fa-edit">u</i></a> </span>
+           | <span style="font-size: 24px;color:red;">
+             <a routerLink="/delete"> <i class="fas fa-trash-alt">d</i></a></span></td>
+      </tr>
+      <!-- {% endfor %} -->
+    </tbody>
+    </table>
+  </div>
+</main>
